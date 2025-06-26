@@ -304,6 +304,7 @@ namespace DoughTempPredictor
         {
             try
             {
+
                 // מוציאים את התיקיה מתוך Globals.filePath (שבה נמצא הקובץ המקורי)
                 string directory = Path.GetDirectoryName(PredictionGlobals.filePath);
 
