@@ -1,0 +1,6 @@
+@DoughTempPredictor_HostAddress = http://localhost:5057
+
+GET {{DoughTempPredictor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
