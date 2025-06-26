@@ -6,7 +6,6 @@ namespace DoughTempPredictor
 {
     public class DataLoader
     {
-       //private static string filePath = "./augmented_data123.csv";
         public static void LoadCsvData()
         {
 
