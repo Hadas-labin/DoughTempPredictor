@@ -140,7 +140,7 @@ namespace DoughTempPredictor.RegressionCalculator
                 if (isolatedWater < 0.5 * totalLiquidAmount)
                 {
                     inputs[indexOil] = 0.5 * totalLiquidAmount;
-                    PredictAndPrint(normalizedInputs);
+                    //PredictAndPrint(normalizedInputs);
                     Console.WriteLine("isolatedIce =   " + isolatedWater);
                     return (isolatedWater, null);
                 }
@@ -160,24 +160,45 @@ namespace DoughTempPredictor.RegressionCalculator
         }
 
 
-            // Predicts using linear regression and prints the result
-            public static void PredictAndPrint( double[] input)
+        public static void asdf(double[] inputFeatures)
+        {
+            LoadThetaAndNormalizationFromCsv();
+            if (PredictionGlobals.theta == null || PredictionGlobals.mean == null || PredictionGlobals.std == null)
+                throw new InvalidOperationException("Model parameters not loaded.");
+
+            if (inputFeatures.Length != PredictionGlobals.mean.Length)
+                throw new ArgumentException("Input feature count does not match model.");
+
+            // נרמול של x
+            double[] normalizedInput = new double[inputFeatures.Length];
+            for (int i = 0; i < inputFeatures.Length; i++)
             {
-                if (PredictionGlobals.theta.Length != input.Length + 1)
-                {
-                    Console.WriteLine("Error: Theta length must be one more than input length (to include bias).");
-                    return;
-                }
+                if (PredictionGlobals.std[i] == 0)
+                    throw new DivideByZeroException($"Standard deviation at index {i} is zero.");
 
-            double prediction = PredictionGlobals.theta[0]; // bias term
-
-                for (int i = 0; i < input.Length; i++)
-                {
-                    prediction += PredictionGlobals.theta[i + 1] * input[i];
-                }
-
-                Console.WriteLine($"Prediction: {prediction:F3}");
+                normalizedInput[i] = (inputFeatures[i] - PredictionGlobals.mean[i]) / PredictionGlobals.std[i];
             }
+
+            // הוספת עמודת אחדות (bias term)
+            double[] xWithBias = new double[normalizedInput.Length + 1];
+            xWithBias[0] = 1.0;
+            for (int i = 0; i < normalizedInput.Length; i++)
+            {
+                xWithBias[i + 1] = normalizedInput[i];
+            }
+
+            // חישוב y_norm = x_norm * theta
+            double yNormalized = 0;
+            for (int i = 0; i < PredictionGlobals.theta.Length; i++)
+            {
+                yNormalized += xWithBias[i] * PredictionGlobals.theta[i];
+            }
+
+            // שיחזור y המקורי מהנרמול
+            double y = yNormalized *yStd + yMean;
+            Console.WriteLine($"Predicted dough temperature: {y:F2}°C");
         }
+
+    }
 
 }

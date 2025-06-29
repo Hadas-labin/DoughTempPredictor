@@ -9,7 +9,7 @@
         public static double[] theta;
         public const double iceTemperature = -78.5;
         public static double predictedY = 26;
-        public static string filePath = @"..\data\boston.csv";
+        public static string filePath = @"..\data\Multivariate_Linear_Regression.csv";
         public static double[] mean;
         public static double[] std;
         public static double Y_Mean { get; set; }

@@ -13,62 +13,21 @@ namespace DoughTempPredictor
             try
             {
                 DataLoader.LoadCsvData();
-
-                //double[,] X = PredictionGlobals.Xs;
-                //double[] y = PredictionGlobals.Ys;
-
-                int m = PredictionGlobals.Ys.Length;
-
-                // X = PrepareFeatures(X);
-                //  Globals.Xs = X;
-
-                //int n = PredictionGlobals.Xs.GetLength(1);
-
+                //אתחול ערכי זטה
                 InitializeTheta();
-
-                //PredictionGlobals.theta = theta;
-
+                //מנרמל את ערכי Y
                 NormalizeY();
-
-
+                //מנרמל את ערכי X
                 NormalizeFeatures();
+                //מכנס את ערכי זטה
                 RunGradientDescent();
-
-                //PredictionGlobals.theta = theta;
-
+                //שומר בקובץ את זטה, ממוצא, סטיית תקן
                 SaveThetaToFile();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error during training process: {ex.Message}");
                 throw;
-            }
-        }
-
-        /// <summary>
-        /// סידור מחדש של עמודות מטריצת הקלט – מעביר את עמודת האחדות לראש.
-        /// </summary>
-        private static double[,] PrepareFeatures(double[,] X)
-        {
-            try
-            {
-                int m = X.GetLength(0);
-                int n = X.GetLength(1);
-                double[,] Xnew = new double[m, n];
-
-                for (int i = 0; i < m; i++)
-                {
-                    Xnew[i, 0] = X[i, 3]; // עמודת אחדות
-                    Xnew[i, 1] = X[i, 0];
-                    Xnew[i, 2] = X[i, 1];
-                    Xnew[i, 3] = X[i, 2];
-                }
-
-                return Xnew;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
 
@@ -145,16 +104,15 @@ namespace DoughTempPredictor
                     double mean = 0, std = 0;
                     for (int i = 0; i < m; i++) mean += PredictionGlobals.Xs[i, j];
                     mean /= m;
+
                     mean1[j - 1] = mean;
                     Console.WriteLine($"lolaa {j} = {mean}");
 
                     for (int i = 0; i < m; i++) std += Math.Pow(PredictionGlobals.Xs[i, j] - mean, 2);
                     std = Math.Sqrt(std / m);
 
-                    if (std == 0)
-                    {
-                        std = 1;
-                    }
+                    if (std == 0) std = 1;
+                    
                     std1[j - 1] = std;
 
                     for (int i = 0; i < m; i++)
@@ -175,13 +133,13 @@ namespace DoughTempPredictor
         /// <summary>
         /// מריץ את אלגוריתם Gradient Descent ומחשב את θ.
         /// </summary>
-        private static void RunGradientDescent(/*double[,] X, double[] y, double[] theta*/)
+        private static void RunGradientDescent()
         {
             try
             {
                 int m = PredictionGlobals.Xs.GetLength(0);
                 int n = PredictionGlobals.Xs.GetLength(1);
-                int maxIterations = 1000;
+                int maxIterations = 50000;
                 double learningRate = 0.01;
                 double tolerance = 1e-6;
                 double previousCost = double.MaxValue;

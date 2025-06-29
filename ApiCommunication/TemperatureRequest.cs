@@ -6,5 +6,6 @@ namespace project.ApiCommunication
         public double oil { get; set; }
         public double water { get; set; }
         public double flour { get; set; }
+        public double x4 { get; set; }
     }
 }

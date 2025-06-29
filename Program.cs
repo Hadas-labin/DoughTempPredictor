@@ -51,17 +51,18 @@ namespace DoughTempPredictor
             {
                 try
                 {
-                    double[] inputs = new double[] { data.flour, data.oil, data.water, 0 };
-                    (double IceAmount, double? OilAmount) = PredictionEnhancements.CheckAndSendFeature(inputs, 120);
+                    double[] inputs = new double[] {  data.oil, data.water, data.flour, data.x4 };
+                    PredictionEnhancements.asdf(inputs);
+                    //(double IceAmount, double? OilAmount) = PredictionEnhancements.CheckAndSendFeature(inputs, 120);
 
-                    var response = new PredictionResponse
-                    {
-                        IceAmount = IceAmount,
-                        OilAmount = OilAmount,
-                        ErrorMessage = ""
-                    };
-
-                    return Results.Ok(response);
+                    //var response = new PredictionResponse
+                    //{
+                    //    IceAmount = IceAmount,
+                    //    OilAmount = OilAmount,
+                    //    ErrorMessage = ""
+                    //};
+                    return Results.NoContent();
+                    //return Results.Ok(response);
                 }
                 catch (Exception ex)
                 {
@@ -78,10 +79,8 @@ namespace DoughTempPredictor
             {
                 try
                 {
-                    // כאן תבצע את פעולת החיזוי – לדוגמה:
                     Console.WriteLine("📦 התחיל חיזוי חודשי לפי נתוני בצק");
 
-                    // קריאה לפונקציית חיזוי כלשהי
                     LinearRegression.PerformGradientDescent();
 
                     predict.PredictAndPrintFromCsv();

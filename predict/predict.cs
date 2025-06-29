@@ -43,7 +43,7 @@ namespace DoughTempPredictor
         public static void PredictAndPrintFromCsv()
         {
             string directory = Path.GetDirectoryName(PredictionGlobals.filePath);
-            string filePath = Path.Combine(directory, "aabbcc.csv");
+            string filePath = Path.Combine(directory, "predict.csv");
 
             using (var reader = new StreamReader(filePath))
             {
@@ -56,23 +56,13 @@ namespace DoughTempPredictor
 
                     var values = line.Split(',');
 
-                    double ZN = double.Parse(values[0], CultureInfo.InvariantCulture);
-                    double INDUS = double.Parse(values[1], CultureInfo.InvariantCulture);
-                    double CHAS = double.Parse(values[2], CultureInfo.InvariantCulture);
-                    double NOX = double.Parse(values[3], CultureInfo.InvariantCulture);
-                    double RM = double.Parse(values[4], CultureInfo.InvariantCulture);
-                    double AGE = double.Parse(values[5], CultureInfo.InvariantCulture);
-                    double DIS = double.Parse(values[6], CultureInfo.InvariantCulture);
-                    double RAD = double.Parse(values[7], CultureInfo.InvariantCulture);
-                    double TAX = double.Parse(values[8], CultureInfo.InvariantCulture);
-                    double PTR = double.Parse(values[9], CultureInfo.InvariantCulture);
-                    double B = double.Parse(values[10], CultureInfo.InvariantCulture);
-                    double LST = double.Parse(values[11], CultureInfo.InvariantCulture);
+                    double X1 = double.Parse(values[0], CultureInfo.InvariantCulture);
+                    double X2 = double.Parse(values[1], CultureInfo.InvariantCulture);
+                    double X3 = double.Parse(values[2], CultureInfo.InvariantCulture);
+                    double X4 = double.Parse(values[3], CultureInfo.InvariantCulture);
+                    double trueY = double.Parse(values[4], CultureInfo.InvariantCulture); // הערך האמיתי
 
-
-                    double trueY = double.Parse(values[12], CultureInfo.InvariantCulture); // הערך האמיתי
-
-                    double[] inputs = new double[] { ZN, INDUS, CHAS, NOX ,RM, AGE, DIS, RAD, TAX, PTR, B, LST};
+                    double[] inputs = new double[] {X1, X2, X3, X4};
                     double predictedY = Predict(inputs);
 
                     if (trueY == 0)

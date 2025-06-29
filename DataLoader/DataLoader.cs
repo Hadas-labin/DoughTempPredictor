@@ -8,7 +8,6 @@ namespace DoughTempPredictor
     {
         public static void LoadCsvData()
         {
-
             if (!File.Exists(PredictionGlobals.filePath))
                 throw new FileNotFoundException("CSV file not found.", PredictionGlobals.filePath);
 
@@ -21,10 +20,10 @@ namespace DoughTempPredictor
             // int numRows = Math.Min(500, lines.Length - 1); // Skip header
             int numRows = lines.Length - 1;
             int numFeatures = lines[1].Length - 2;
-            PredictionGlobals.Xs = new double[numRows, 13];
+            PredictionGlobals.Xs = new double[numRows, 5];
             PredictionGlobals.Ys = new double[numRows];
 
-            for (int i = 0; i < numRows - 20; i++)
+            for (int i = 0; i < numRows; i++)
             {
                 string line = lines[i + 1]; // Skip header row
                 if (string.IsNullOrWhiteSpace(line))
@@ -41,19 +40,12 @@ namespace DoughTempPredictor
                 try
                 {
                     // parts[0] = שם המוצר → לא משתמשים בו
-                    double bias = double.Parse(parts[1], CultureInfo.InvariantCulture);         // ✅ תמיד 1
-                    double flourTemp = double.Parse(parts[2], CultureInfo.InvariantCulture);    // קמח
-                    double oilTemp = double.Parse(parts[3], CultureInfo.InvariantCulture);      // שמן
-                    double waterTemp = double.Parse(parts[4], CultureInfo.InvariantCulture);    // מים
-                    double iceQty = double.Parse(parts[5], CultureInfo.InvariantCulture);       // קרח
-                    double finalDoughTemp = double.Parse(parts[6], CultureInfo.InvariantCulture); // ✅ Y
-
-                    PredictionGlobals.Xs[i, 0] = bias;
-                    PredictionGlobals.Xs[i, 1] = flourTemp;
-                    PredictionGlobals.Xs[i, 2] = oilTemp;
-                    PredictionGlobals.Xs[i, 3] = waterTemp;
-                    PredictionGlobals.Xs[i, 4] = iceQty;
-                    PredictionGlobals.Ys[i] = finalDoughTemp;
+                    PredictionGlobals.Xs[i, 0] =1;         // ✅ תמיד 1
+                    PredictionGlobals.Xs[i, 1] = double.Parse(parts[0], CultureInfo.InvariantCulture);   
+                    PredictionGlobals.Xs[i, 2] = double.Parse(parts[1], CultureInfo.InvariantCulture);  
+                    PredictionGlobals.Xs[i, 3] = double.Parse(parts[2], CultureInfo.InvariantCulture);
+                    PredictionGlobals.Xs[i, 4] = double.Parse(parts[3], CultureInfo.InvariantCulture);
+                    PredictionGlobals.Ys[i] = double.Parse(parts[4], CultureInfo.InvariantCulture); 
 
                 }
                 catch (FormatException ex)
